@@ -35,7 +35,7 @@ controllers.controller('AuthorController', [ '$http', '$routeParams', '$scope',
 
 controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope',
 	function($http, $routeParams, $scope) {
-		// console.debug("QuotationController - id: " + $routeParams.id);
+		//console.log("QuotationController - id: " + $routeParams.id);
 
 		$http.get('https://www.googleapis.com/freebase/v1/topic/m/' + $routeParams.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc&lang=en').success(function(data) {
 			var quotation = new Quotation(data.id);
@@ -82,6 +82,9 @@ controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope
 				  };
 			
 			gapi.interactivepost.render('gplus-share', options);
+		}).
+		error(function(data, status, headers, config) {
+			console.log("QuotationController - config: " + JSON.stringify(config));
 		});
 	}]);
 

@@ -1,6 +1,6 @@
 var quotation = angular.module('quotation', [ 'ngRoute', 'ngTable', 'angulartics', 'angulartics.google.analytics', 'controllers' ]);
 
-quotation.config([ '$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+quotation.config([ '$httpProvider', '$locationProvider', '$routeProvider', function($httpProvider, $locationProvider, $routeProvider) {
 	$locationProvider.html5Mode(true);
 	$routeProvider.
 	when('/', {
