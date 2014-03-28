@@ -3,7 +3,8 @@ var controllers = angular.module('controllers', []);
 function updateAuthor($scope, author) {
 	//console.log("updateAuthor - author: " + JSON.stringify(author));
     var request = gapi.client.request({
-    	'path': '/freebase/v1/topic' + author.id
+    	'path': '/freebase/v1/topic' + author.id,
+    	'params': { "lang": language }
     	});
 	request.execute(function(data) {
 		//console.log("updateAuthor - data: " + JSON.stringify(data));
@@ -23,7 +24,8 @@ function updateAuthor($scope, author) {
 
 function updateSubject($scope, subject) {
     var request = gapi.client.request({
-    	'path': '/freebase/v1/topic' + subject.id
+    	'path': '/freebase/v1/topic' + subject.id,
+    	'params': { "lang": language }
     	});
 	request.execute(function(data) {
 		subject.setName(data.property['/type/object/name']);
@@ -36,7 +38,8 @@ function updateSubject($scope, subject) {
 
 function updateSource($scope, source) {
     var request = gapi.client.request({
-    	'path': '/freebase/v1/topic' + source.id
+    	'path': '/freebase/v1/topic' + source.id,
+    	'params': { "lang": language }
     	});
 	request.execute(function(data) {
 		source.setType(data.property['/common/topic/notable_types']);
@@ -58,7 +61,8 @@ controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope
 		//console.log("QuotationController - id: " + $routeParams.id);
 	
 	    var request = gapi.client.request({
-	    	'path': '/freebase/v1/topic/m/' + $routeParams.id
+	    	'path': '/freebase/v1/topic/m/' + $routeParams.id,
+	    	'params': { "lang": language }
 	    	});
 		request.execute(function(data) {
 			//console.log("QuotationController - data: " + JSON.stringify(data));
@@ -122,7 +126,8 @@ controllers.controller('TopicController', [ '$routeParams', '$scope',
 		// console.log("TopicController - id: " + $routeParams.id);
 
 	    var request = gapi.client.request({
-	    	'path': '/freebase/v1/topic/m/' + $routeParams.id
+	    	'path': '/freebase/v1/topic/m/' + $routeParams.id,
+	    	'params': { "lang": language }
 	    	});
 		request.execute(function(data) {
 			$scope.data = data;

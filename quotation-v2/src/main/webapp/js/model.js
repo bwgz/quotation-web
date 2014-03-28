@@ -1,3 +1,23 @@
+function parseDate(input) {
+	var date;
+	
+	if (input.substring(0, 1) == "-") {
+		date = parseInt(input.substring(1, input.length)) + " BC";
+	}
+	else {
+		var parts = input.split('-');
+		if (parts.length < 3) {
+			date = parseInt(parts[0]);
+		}
+		else {
+			var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12);
+			date = d.toString(localeDatePattern);
+		}
+	}
+	
+	return date;
+}
+
 function Person(id) {
 	this.id = id;
 	
@@ -5,7 +25,7 @@ function Person(id) {
 		if (property) {
 			var values = property.values;
 			if (values && values.length != 0) {
-				this.dateOfBirth = values[0].value;
+				this.dateOfBirth = parseDate(values[0].value);
 			}
 		}
 	};
@@ -14,7 +34,7 @@ function Person(id) {
 		if (property) {
 			var values = property.values;
 			if (values && values.length != 0) {
-				this.dateOfDeath = values[0].value;
+				this.dateOfDeath = parseDate(values[0].value);
 			}
 		}
 	};
@@ -23,7 +43,7 @@ function Person(id) {
 		if (property) {
 			var values = property.values;
 			if (values && values.length != 0) {
-				this.placeeOfBirth = values[0].text;
+				this.placeOfBirth = values[0].text;
 			}
 		}
 	};

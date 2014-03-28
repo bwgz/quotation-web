@@ -26,7 +26,16 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-	
+    
+	<servlet>
+		<servlet-name>locale</servlet-name>
+		<jsp-file>/jsp/locale/locale.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>locale</servlet-name>
+		<url-pattern>/locale/locale</url-pattern>
+	</servlet-mapping>
+    	
 	<servlet>
 		<servlet-name>quotation/random</servlet-name>
 		<jsp-file>/jsp/quotation/random.jsp</jsp-file>
