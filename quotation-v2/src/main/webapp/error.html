@@ -87,9 +87,6 @@
 				<li><a href="/">Quotation</a></li>
 				<li><a href="/mobile" target="_blank">Mobile</a></li>
 			</ul>
-			<form name="search" class="navbar-form navbar-right" ng-controller="SearchSubmitController" ng-submit="submit()">
-				<input ng-model="query" name="text" class="form-control col-lg-8" placeholder="Search" id="submit" value="Submit" />
-			</form>
 		</div>
 	</div>
 	
@@ -139,9 +136,16 @@
 	
 	<div>
 		<div class="row">
+			<div class="col-lg-12 alert alert-danger">
+				<h1 class="text-center"><strong>Oops, looks like something went wrong.</strong></h1>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-lg-12">
-				<h1>OOPS! PAGE NOT FOUND</h1>
-				<h2 class="ng-binding">I have not failed. I've just found 10,000 ways that won't work.</h2>
+				<img style="float:left; margin-right:20px" src="https://www.googleapis.com/freebase/v1/image/m/02blt98?key=AIzaSyAXwb8gGqL5QfOLAmKyT7vF3OHEtiaV-Nw&maxwidth=150"></img>
+				<blockquote>
+					I have not failed. I've just found 10,000 ways that won't work.<br/><cite>&dash; Thomas Edison</cite>
+				</blockquote>
 			</div>
 		</div>
 	</div>
