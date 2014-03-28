@@ -41,11 +41,15 @@
 		<from>/quotation/m/(.*)</from>
 		<to type="redirect">/#/quotation/m/$1</to>
 	</rule>
-		<rule>
+	<rule>
 		<from>/subject/m/(.*)</from>
 		<to type="redirect">/#/subject/m/$1</to>
 	</rule>
-	
+	<rule>
+		<from>^/search$</from>
+		<to type="redirect">/#/search?query=%{parameter:query}</to>
+	</rule>
+					
     <!--
 
     INSTALLATION

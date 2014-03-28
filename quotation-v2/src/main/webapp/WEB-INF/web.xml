@@ -7,11 +7,20 @@
 	id="WebApp_ID" version="3.0">
 	
 	<display-name>Quotation</display-name>
-  
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	<error-page>
+        <error-code>404</error-code>
+		<location>/error.html</location>
+	</error-page>
+	
 	<filter>
         <filter-name>UrlRewriteFilter</filter-name>
         <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-    </filter>
+	</filter>
     <filter-mapping>
         <filter-name>UrlRewriteFilter</filter-name>
         <url-pattern>/*</url-pattern>

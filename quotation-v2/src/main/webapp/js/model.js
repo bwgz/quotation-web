@@ -4,7 +4,7 @@ function Person(id) {
 	this.setDateOfBirth = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.dateOfBirth = values[0].value;
 			}
 		}
@@ -13,7 +13,7 @@ function Person(id) {
 	this.setDateOfDeath = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.dateOfDeath = values[0].value;
 			}
 		}
@@ -22,7 +22,7 @@ function Person(id) {
 	this.setPlaceOfBirth = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.placeeOfBirth = values[0].text;
 			}
 		}
@@ -31,7 +31,7 @@ function Person(id) {
 	this.setPlaceOfDeath = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.placeOfDeath = values[0].text;
 			}
 		}
@@ -40,7 +40,7 @@ function Person(id) {
 	this.setName = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.name = values[0].text;
 			}
 		}
@@ -49,7 +49,7 @@ function Person(id) {
 	this.setNotableFor = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				var value = property.values[0];
 				this.notableFor = value.text;
 			}
@@ -66,7 +66,7 @@ function Person(id) {
 	this.setDescription = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.description = values[0];
 			}
 		}
@@ -75,7 +75,7 @@ function Person(id) {
 	this.setImage = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.image = values[0].id;
 			}
 		}
@@ -94,7 +94,7 @@ function Subject(id) {
 	this.setDescription = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.description = values[0];
 			}
 		}
@@ -103,7 +103,7 @@ function Subject(id) {
 	this.setImage = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.image = values[0].id;
 			}
 		}
@@ -112,7 +112,7 @@ function Subject(id) {
 	this.setName = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.name = values[0].text;
 			}
 		}
@@ -138,7 +138,7 @@ function Source(id) {
 	this.setType = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.type = values[0].text;
 			}
 		}
@@ -151,7 +151,7 @@ function Quotation(id) {
 	this.setQuotation = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
+			if (values && values.length != 0) {
 				this.quotation = values[0].value;
 			}
 		}
@@ -160,8 +160,8 @@ function Quotation(id) {
 	this.setSpokenByCharacter = function(property) {
 		if (property) {
 			var values = property.values;
-			if (values) {
-				this.spokenByCharacter = property.values[0].text;
+			if (values && values.length != 0) {
+				this.spokenByCharacter = values[0].text;
 			}
 		}
 	};

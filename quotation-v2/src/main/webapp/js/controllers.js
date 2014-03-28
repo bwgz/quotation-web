@@ -1,7 +1,12 @@
 var controllers = angular.module('controllers', []);
 
-var updateAuthor = function($http, author) {
-	$http.get('https://www.googleapis.com/freebase/v1/topic' + author.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc&lang=en').success(function(data) {
+function updateAuthor($scope, author) {
+	//console.log("updateAuthor - author: " + JSON.stringify(author));
+    var request = gapi.client.request({
+    	'path': '/freebase/v1/topic' + author.id
+    	});
+	request.execute(function(data) {
+		//console.log("updateAuthor - data: " + JSON.stringify(data));
 		author.setName(data.property['/type/object/name']);
 		author.setNotableFor(data.property['/common/topic/notable_for']);
 		author.setDescription(data.property['/common/topic/description']);
@@ -11,33 +16,52 @@ var updateAuthor = function($http, author) {
 		author.setDateOfDeath(data.property['/people/deceased_person/date_of_death']);
 		author.setPlaceOfDeath(data.property['/people/deceased_person/place_of_death']);
 		author.setQuotations(data.property['/people/person/quotations']);
+		//console.log("updateAuthor - author: " + JSON.stringify(author));
+		$scope.$apply()
 	});
 };
 
-var updateSubject = function($http, subject) {
-	$http.get('https://www.googleapis.com/freebase/v1/topic' + subject.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc&lang=en').success(function(data) {
+function updateSubject($scope, subject) {
+    var request = gapi.client.request({
+    	'path': '/freebase/v1/topic' + subject.id
+    	});
+	request.execute(function(data) {
 		subject.setName(data.property['/type/object/name']);
 		subject.setDescription(data.property['/common/topic/description']);
 		subject.setImage(data.property['/common/topic/image']);
 		subject.setQuotations(data.property['/media_common/quotation_subject/quotations_about_this_subject']);
+		$scope.$apply()
 	});
 };
 
-controllers.controller('AuthorController', [ '$http', '$routeParams', '$scope',
-	function($http, $routeParams, $scope) {
-		console.debug("AuthorController - id: " + $routeParams.id);
+function updateSource($scope, source) {
+    var request = gapi.client.request({
+    	'path': '/freebase/v1/topic' + source.id
+    	});
+	request.execute(function(data) {
+		source.setType(data.property['/common/topic/notable_types']);
+		$scope.$apply()
+	});
+};
+
+controllers.controller('AuthorController', [ '$routeParams', '$scope',
+	function($routeParams, $scope) {
+		//console.log("AuthorController - id: " + $routeParams.id);
 		
 		var author = new Person('/m/' + $routeParams.id);
 		$scope.author = author;
-		
-		updateAuthor($http, author);
+		updateAuthor($scope, author);
 	}]);
 
 controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope',
 	function($http, $routeParams, $scope) {
 		//console.log("QuotationController - id: " + $routeParams.id);
-
-		$http.get('https://www.googleapis.com/freebase/v1/topic/m/' + $routeParams.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc&lang=en').success(function(data) {
+	
+	    var request = gapi.client.request({
+	    	'path': '/freebase/v1/topic/m/' + $routeParams.id
+	    	});
+		request.execute(function(data) {
+			//console.log("QuotationController - data: " + JSON.stringify(data));
 			var quotation = new Quotation(data.id);
 			$scope.quotation = quotation;
 			
@@ -46,16 +70,14 @@ controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope
 			quotation.setSource(data.property['/media_common/quotation/source']);
 
 			if (quotation.source) {
-				$http.get('https://www.googleapis.com/freebase/v1/topic' + quotation.source.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc&lang=en').success(function(data) {
-					quotation.source.setType(data.property['/common/topic/notable_types']);
-				});
+				updateSource($scope, quotation.source);
 			}
 			
 			quotation.setAuthors(data.property['/media_common/quotation/author']);
 			if (quotation.authors) {
 				for (var i = 0; i < quotation.authors.length; i++) {
 					var author = quotation.authors[i];
-					updateAuthor($http, author);
+					updateAuthor($scope, author);
 				}
 			}
 			
@@ -63,8 +85,8 @@ controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope
 			if (quotation.subjects) {
 				for (var i = 0; i < quotation.subjects.length; i++) {
 					var subject = quotation.subjects[i];
-					// console.debug("QuotationController - subject.id: " + subject.id);
-					updateSubject($http, subject);
+					// console.log("QuotationController - subject.id: " + subject.id);
+					updateSubject($scope, subject);
 				}
 			}
 			
@@ -82,35 +104,34 @@ controllers.controller('QuotationController', [ '$http', '$routeParams', '$scope
 				  };
 			
 			gapi.interactivepost.render('gplus-share', options);
-		}).
-		error(function(data, status, headers, config) {
-			console.log("QuotationController - config: " + JSON.stringify(config));
 		});
 	}]);
 
-controllers.controller('SubjectController', [ '$http', '$routeParams', '$scope',
-	function($http, $routeParams, $scope) {
-		// console.debug("SubjectController - id: " + $routeParams.id);
+controllers.controller('SubjectController', [ '$routeParams', '$scope',
+	function($routeParams, $scope) {
+		// console.log("SubjectController - id: " + $routeParams.id);
 		
 		var subject = new Subject('/m/' + $routeParams.id);
 		$scope.subject = subject;
 		
-		updateSubject($http, subject);
+		updateSubject($scope, subject);
 	}]);
 
-controllers.controller('TopicController', [ '$http', '$routeParams', '$scope',
-	function($http, $routeParams, $scope) {
-		// console.debug("TopicController - id: " + $routeParams.id);
+controllers.controller('TopicController', [ '$routeParams', '$scope',
+	function($routeParams, $scope) {
+		// console.log("TopicController - id: " + $routeParams.id);
 
-		$http.get('https://www.googleapis.com/freebase/v1/topic/m/' + $routeParams.id + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc').success(function(data) {
-			
+	    var request = gapi.client.request({
+	    	'path': '/freebase/v1/topic/m/' + $routeParams.id
+	    	});
+		request.execute(function(data) {
 			$scope.data = data;
 		});
 	}]);
 
 controllers.controller('RandomQuotationController', [ '$http', '$location', '$scope',
 	function($http, $location, $scope) {
-		// console.debug("RandomQuotationController");
+		// console.log("RandomQuotationController");
 		$http.get('/quotation/random/mid').success(function(data) {
 			$location.path('/quotation' + data.mid).replace();
 		});
@@ -118,24 +139,23 @@ controllers.controller('RandomQuotationController', [ '$http', '$location', '$sc
 
 controllers.controller('SearchSubmitController', [ '$location', '$scope',
   	function($location, $scope) {
-  		// console.debug("SearchSubmitController");
+  		// console.log("SearchSubmitController");
 		$scope.submit = function() {
-			if ($scope.text) {
-				// console.debug("Ctrl - text: " + $scope.text);
-				$location.path('/search?query=' + $scope.text);
+			if ($scope.query) {
+				// console.log("Ctrl - text: " + $scope.text);
 				$location.path('/search');
-				$location.search({query: $scope.text});
-				// console.debug("Ctrl - path: " + $location.path());
+				$location.search({query: $scope.query});
+				//console.log("Ctrl - path: " + $location.path());
 			}
 		};
   	}]);
 
 controllers.controller('SearchController', [ '$http', '$routeParams', '$scope', 'ngTableParams',
  	function($http, $routeParams, $scope, ngTableParams) {
- 		// console.debug("SearchController");
+ 		// console.log("SearchController");
  		
  		$scope.query = $routeParams.query;
- 		// console.debug("SearchController - query: " + $scope.query);
+ 		// console.log("SearchController - query: " + $scope.query);
  		
  	    $scope.tableParams = new ngTableParams({
  	        page: 1,
@@ -143,11 +163,15 @@ controllers.controller('SearchController', [ '$http', '$routeParams', '$scope', 
  	    }, {
  	        total: 0,
  	        getData: function($defer, params) {
- 	    		$http.get('https://www.googleapis.com/freebase/v1/search' + '?key=AIzaSyBAUcgyzMRccb840zUs7KhtwaCDRddRWrc' + '&query=' +  $scope.query + '&filter=' + '(any type:/media_common/quotation)' + '&limit=' +  100).success(function(data) {
- 	    			var results = data.result;
+	 	   	    var request = gapi.client.request({
+	 		    	'path': '/freebase/v1/search',
+	 		    	'params': { 'query': $scope.query, 'filter': '(any type:/media_common/quotation)', 'limit': 100 }
+	 		    	});
+	 			request.execute(function(data) {
+	 				var results = data.result;
                     params.total(results.length);
  	    			$defer.resolve(results.slice((params.page() - 1) * params.count(), params.page() * params.count()));
- 	    		});
+	 			});
  	        }
  	    });
 
